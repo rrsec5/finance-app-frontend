@@ -1,4 +1,4 @@
-import { WalletTypeNumber, WalletTypeString } from '../../interfaces/Interfaces'
+import { WalletTypeNumber } from '../../interfaces/Interfaces'
 import api from '../axiosInstance'
 
 export const createWallet = (walletData: WalletTypeNumber) => {
@@ -13,6 +13,9 @@ export const deleteWallet = (id: string) => {
   return api.delete(`/wallets/${id}`)
 }
 
-export const editWallet = async (id: string, data: Partial<WalletTypeNumber>) => {
+export const editWallet = async (
+  id: string,
+  data: Partial<WalletTypeNumber>,
+) => {
   return await api.put(`/wallets/${id}`, data)
 }

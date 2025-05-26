@@ -17,7 +17,7 @@ export const Wallets = () => {
       {loading ? (
         <LoadingCircleSpinner />
       ) : error ? (
-        <div className="text-error mt-4">Error loading wallets.</div>
+        <div className="text-error mt-4">{error}</div>
       ) : (
         <div className="grid grid-cols-3 justify-center gap-8 px-5">
           {wallets.map((wallet) => (
