@@ -16,7 +16,7 @@ export const WalletDetail = () => {
   const [isEditWalletModalOpen, setIsEditWalletModalOpen] = useState(false)
   const [isDeleteWalletModalOpen, setIsDeleteWalletModalOpen] = useState(false)
 
-  const { wallets, selectedWalletId, selectedWallet, setSelectedWalletId } =
+  const { wallets, selectedWalletId, selectedWallet, setSelectedWalletId, setWallets } =
     useWallet()
   const { setTitle } = usePageTitle()
   const { id } = useParams<{ id: string }>()
@@ -84,6 +84,7 @@ export const WalletDetail = () => {
               name={selectedWallet.name}
               currency={selectedWallet.currency}
               balance={selectedWallet.balance}
+              setWallets={setWallets}
             />
 
             <IconButton
@@ -98,6 +99,7 @@ export const WalletDetail = () => {
               name={selectedWallet.name}
               currency={selectedWallet.currency}
               balance={selectedWallet.balance}
+              setWallets={setWallets}
             />
           </div>
         </div>

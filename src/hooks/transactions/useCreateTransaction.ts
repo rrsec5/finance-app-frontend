@@ -24,9 +24,8 @@ export const userCreateTransaction = (
 
     await toast.promise(
       createTransaction(transactionData).then((res) => {
-        const newTransaction = res.data // 👈 отримуємо справжню транзакцію
-
-        // Додаємо нову транзакцію в список
+        const newTransaction = res.data
+        
         if (setTransactions) {
           setTransactions((prev) => [newTransaction, ...prev])
         }

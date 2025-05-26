@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { Button } from '../../UI/Button'
 import {
+  WalletTypeNumberId,
   WalletTypeString,
   WalletTypeStringId,
 } from '../../../interfaces/Interfaces'
@@ -10,6 +11,7 @@ interface WalletFormProps {
   defaultValues?: WalletTypeStringId
   setOpen: (value: boolean) => void
   showCancel?: boolean
+  setWallets: React.Dispatch<React.SetStateAction<WalletTypeNumberId[]>>
 }
 
 export const WalletForm = ({
@@ -17,6 +19,7 @@ export const WalletForm = ({
   defaultValues,
   setOpen,
   showCancel,
+  setWallets,
 }: WalletFormProps) => {
   const {
     register,
