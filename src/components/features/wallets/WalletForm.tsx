@@ -10,6 +10,7 @@ interface WalletFormProps {
   defaultValues?: WalletTypeStringId
   setOpen: (value: boolean) => void
   showCancel?: boolean
+  isEditing?: boolean
 }
 
 export const WalletForm = ({
@@ -17,6 +18,7 @@ export const WalletForm = ({
   defaultValues,
   setOpen,
   showCancel,
+  isEditing,
 }: WalletFormProps) => {
   const {
     register,
@@ -75,7 +77,9 @@ export const WalletForm = ({
         </label>
         <select
           {...register('currency')}
-          className="w-full p-2 border-2 border-border rounded mt-1 bg-elevation-2 transition cursor-pointer font-montserrat text-text-primary"
+          disabled={isEditing}
+          className={`w-full p-2 border-2 rounded mt-1 border-border bg-elevation-2 transition font-montserrat text-text-primary 
+            ${!isEditing ? ' cursor-pointer' : 'cursor-not-allowed text-text-secondary'}`}
         >
           <option value="EUR">EUR</option>
           <option value="USD">USD</option>
@@ -111,7 +115,9 @@ export const WalletForm = ({
                 },
               },
             })}
-            className="text-text-primary w-full p-2 border-2 border-border rounded mt-1 pr-16 font-lato"
+            disabled={isEditing}
+            className={`text-text-primary w-full p-2 border-2 border-border rounded mt-1 pr-16 font-lato 
+              ${!isEditing ? ' cursor-pointer' : 'cursor-not-allowed text-text-secondary'}`}
           />
           <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary font-montserrat">
             {currency}

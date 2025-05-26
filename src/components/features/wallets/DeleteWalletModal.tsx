@@ -1,4 +1,5 @@
-//import { deleteWallet } from '../../api/walletsApi'
+import { useNavigate } from 'react-router-dom'
+import { useDeleteWallet } from '../../../hooks/wallets/useDeleteWallet'
 import {
   ModalControl,
   WalletTypeNumberId,
@@ -15,11 +16,20 @@ export const DeleteWalletModal = ({
   name,
   currency,
   balance,
-}: ChangeWalletProps) => {
+  setWallets,
+}: ChangeWalletProps & {
+  setWallets: React.Dispatch<React.SetStateAction<WalletTypeNumberId[]>>
+}) => {
+  const { handleDeleteWallet } = useDeleteWallet(
+    () => setOpen(false),
+    setWallets,
+  )
+  const navigate = useNavigate()
+
   const handleDelete = (id: string) => {
-    console.log('Delete wallet: ', { id })
-    //const deletedWallet = deleteWallet({ id })
+    handleDeleteWallet(id)
     setOpen(false)
+    navigate('/wallets')
   }
 
   return (

@@ -11,6 +11,7 @@ interface WalletModalProps {
   onSave: (data: WalletTypeStringId) => void
   defaultValues?: WalletTypeStringId
   showCancel?: boolean
+  isEditing?: boolean
 }
 
 export const BaseWalletModal = ({
@@ -20,6 +21,7 @@ export const BaseWalletModal = ({
   onSave,
   defaultValues,
   showCancel = false,
+  isEditing = false,
 }: WalletModalProps) => {
   return (
     <Modal open={open} setOpen={setOpen}>
@@ -34,6 +36,7 @@ export const BaseWalletModal = ({
         defaultValues={defaultValues}
         setOpen={setOpen}
         showCancel={showCancel}
+        isEditing={isEditing}
       />
     </Modal>
   )

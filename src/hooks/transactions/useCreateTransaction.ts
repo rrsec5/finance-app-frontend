@@ -1,30 +1,40 @@
 import { toast } from 'sonner'
 import { createTransaction } from '../../api/transactions/transactionsApi'
-import { TransactionTypeString } from '../../interfaces/Interfaces'
+import {
+  TransactionTypeString,
+  TransactionTypeNumberId,
+} from '../../interfaces/Interfaces'
 
-export const userCreateTransaction = (onSuccess?: () => void) => {
+export const userCreateTransaction = (
+  onSuccess?: () => void,
+  setTransactions?: React.Dispatch<
+    React.SetStateAction<TransactionTypeNumberId[]>
+  >,
+) => {
   const handleCreateTransaction = async (data: TransactionTypeString) => {
-    console.log({
-      ...data,
-      //type: data.type.toUpperCase(),
-      createdAt: data.createdAt.toISOString(),
-    })
+    const transactionData = {
+      walletId: data.walletId,
+      categoryId: data.categoryId,
+      type: data.type,
+      amount: parseFloat(data.amount),
+      currency: data.currency,
+      description: data.description,
+      createdAt: data.createdAt,
+    }
+
     await toast.promise(
-      createTransaction({
-        walletId: data.walletId,
-        categoryId: data.categoryId,
-        type: data.type,
-        amount: parseFloat(data.amount),
-        currency: data.currency,
-        description: data.description,
-        createdAt: data.createdAt,
+      createTransaction(transactionData).then((res) => {
+        const newTransaction = res.data
+        
+        if (setTransactions) {
+          setTransactions((prev) => [newTransaction, ...prev])
+        }
+
+        onSuccess?.()
       }),
       {
         loading: 'Creating transaction...',
-        success: () => {
-          onSuccess?.()
-          return 'Transaction created successfully!'
-        },
+        success: 'Transaction created successfully!',
         error: (error: any) => {
           const message =
             error.response?.data?.error ||

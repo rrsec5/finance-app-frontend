@@ -1,9 +1,21 @@
 import { BaseWalletModal } from './BaseWalletModal'
-import { ModalControl } from '../../../interfaces/Interfaces'
+import {
+  ModalControl,
+  WalletTypeNumberId,
+} from '../../../interfaces/Interfaces'
 import { useCreateWallet } from '../../../hooks/wallets/useCreateWallet'
 
-export const CreateWalletModal = ({ open, setOpen }: ModalControl) => {
-  const { handleCreateWallet } = useCreateWallet(() => setOpen(false))
+export const CreateWalletModal = ({
+  open,
+  setOpen,
+  setWallets,
+}: ModalControl & {
+  setWallets: React.Dispatch<React.SetStateAction<WalletTypeNumberId[]>>
+}) => {
+  const { handleCreateWallet } = useCreateWallet(
+    () => setOpen(false),
+    setWallets,
+  )
 
   return (
     <BaseWalletModal

@@ -12,3 +12,10 @@ export const fetchWallets = () => {
 export const deleteWallet = (id: string) => {
   return api.delete(`/wallets/${id}`)
 }
+
+export const editWallet = async (
+  id: string,
+  data: Partial<WalletTypeNumber>,
+) => {
+  return await api.put(`/wallets/${id}`, data)
+}

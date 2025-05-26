@@ -7,6 +7,7 @@ import { CreateTransModal } from '../../components/features/transactions/CreateT
 import { TransactionCard } from '../../components/features/transactions/TransactionCard'
 import { LoadingCircleSpinner } from '../../components/UI/LoadingCircleSpinner'
 import { useTransactions } from '../../hooks/transactions/useTransactions'
+import { useWallet } from '../../hooks/wallets/UseWallet'
 
 export const Dashboard = () => {
   const [isCreateWalletModalOpen, setIsWalletModalOpen] = useState(false)
@@ -15,6 +16,7 @@ export const Dashboard = () => {
   const { setTitle } = usePageTitle()
 
   const { transactions, loading, error, setTransactions } = useTransactions()
+  const {setWallets} = useWallet()
 
   useEffect(() => {
     setTitle('Dashboard')
@@ -87,12 +89,14 @@ export const Dashboard = () => {
       <CreateWalletModal
         open={isCreateWalletModalOpen}
         setOpen={setIsWalletModalOpen}
+        setWallets={setWallets}
       />
 
       <CreateTransModal
         open={isCreateTransactionModelOpen}
         setOpen={setIsCreateTransactionModelOpen}
         showWalletSelection={true}
+        setTransactions={setTransactions}
       />
     </>
   )

@@ -1,4 +1,3 @@
-//import { deleteTransaction } from '../../api/transactionApi'
 import { useDeleteTransaction } from '../../../hooks/transactions/useDeleteTransaction'
 import { ModalControl } from '../../../interfaces/Interfaces'
 import { Button } from '../../UI/Button'

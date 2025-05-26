@@ -100,8 +100,8 @@ export const TransactionForm = ({
               onChange: (e) => setSelectedWalletId(e.target.value),
             })}
             disabled={!showWalletSelection}
-            className={`w-full p-2 border-2 rounded bg-elevation-2 transition text-text-primary
-      ${showWalletSelection ? 'border-border cursor-pointer' : 'border-border/50 bg-elevation-1 cursor-not-allowed text-text-secondary'}`}
+            className={`w-full p-2 border-2 rounded border-border bg-elevation-2 transition text-text-primary
+      ${showWalletSelection ? 'cursor-pointer' : 'cursor-not-allowed text-text-secondary'}`}
           >
             {wallets.map((wallet) => (
               <option key={wallet.id} value={wallet.id}>
