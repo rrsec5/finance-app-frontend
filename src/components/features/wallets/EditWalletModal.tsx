@@ -1,4 +1,3 @@
-//import { editWallet } from '../../api/walletsApi'
 import { useEditWallet } from '../../../hooks/wallets/useEditWallet'
 import {
   ModalControl,
@@ -17,14 +16,10 @@ export const EditWalletModal = ({
   currency,
   balance,
   setWallets,
-}: ChangeWalletProps & { setWallets: React.Dispatch<
-      React.SetStateAction<WalletTypeNumberId[]>
-    >}) => {
-
-      const { handleEditWallet } = useEditWallet(
-        () => setOpen(false),
-        setWallets,
-      )
+}: ChangeWalletProps & {
+  setWallets: React.Dispatch<React.SetStateAction<WalletTypeNumberId[]>>
+}) => {
+  const { handleEditWallet } = useEditWallet(() => setOpen(false), setWallets)
   const handleSave = (data: WalletTypeStringId) => {
     handleEditWallet(id, data)
     setOpen(false)
@@ -43,7 +38,7 @@ export const EditWalletModal = ({
         balance: balance.toString(),
       }}
       showCancel={true}
-      setWallets={setWallets}
+      isEditing={true}
     />
   )
 }

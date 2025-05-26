@@ -2,10 +2,7 @@ import { LuX } from 'react-icons/lu'
 import { IconButton } from '../../UI/IconButton'
 import { Modal } from '../../UI/Modal'
 import { WalletForm } from './WalletForm'
-import {
-  WalletTypeNumberId,
-  WalletTypeStringId,
-} from '../../../interfaces/Interfaces'
+import { WalletTypeStringId } from '../../../interfaces/Interfaces'
 
 interface WalletModalProps {
   title: string
@@ -14,7 +11,7 @@ interface WalletModalProps {
   onSave: (data: WalletTypeStringId) => void
   defaultValues?: WalletTypeStringId
   showCancel?: boolean
-  setWallets: React.Dispatch<React.SetStateAction<WalletTypeNumberId[]>>
+  isEditing?: boolean
 }
 
 export const BaseWalletModal = ({
@@ -24,7 +21,7 @@ export const BaseWalletModal = ({
   onSave,
   defaultValues,
   showCancel = false,
-  setWallets,
+  isEditing = false,
 }: WalletModalProps) => {
   return (
     <Modal open={open} setOpen={setOpen}>
@@ -39,7 +36,7 @@ export const BaseWalletModal = ({
         defaultValues={defaultValues}
         setOpen={setOpen}
         showCancel={showCancel}
-        setWallets={setWallets}
+        isEditing={isEditing}
       />
     </Modal>
   )

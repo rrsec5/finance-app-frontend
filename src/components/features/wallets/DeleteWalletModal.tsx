@@ -1,4 +1,3 @@
-//import { deleteWallet } from '../../api/walletsApi'
 import { useNavigate } from 'react-router-dom'
 import { useDeleteWallet } from '../../../hooks/wallets/useDeleteWallet'
 import {
