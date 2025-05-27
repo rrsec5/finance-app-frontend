@@ -20,7 +20,9 @@ export const Sidebar = () => {
   const { handleLogOut } = useLogOut()
 
   return (
-    <div className="basis-1/7 min-h-screen h-full bg-elevation-1 p-6 text-text-primary shadow-inner border-r border-border flex flex-col justify-between">
+    //фиксация Sidebar слева при прокрутке сделана криво и через пень-колоду, но вроде работает
+    //проверь, все ли устраивает
+    <div className="fixed top-0 left-0 w-1/7 h-screen bg-elevation-1 p-6 text-text-primary shadow-inner border-r border-border flex flex-col justify-between z-10">
       <div>
         <h2 className="text-h3 font-bold mb-6 font-montserrat tracking-tight">
           Finance Tracker

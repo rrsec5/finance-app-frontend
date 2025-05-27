@@ -16,7 +16,7 @@ export const Dashboard = () => {
   const { setTitle } = usePageTitle()
 
   const { transactions, loading, error, setTransactions } = useTransactions()
-  const {setWallets} = useWallet()
+  const { setWallets } = useWallet()
 
   useEffect(() => {
     setTitle('Dashboard')
@@ -57,7 +57,7 @@ export const Dashboard = () => {
           ) : (
             <div className="mt-4 mr-4">
               <div className="flex flex-col">
-                {transactions.map((trans, idx) => (
+                {transactions.slice(0, 5).map((trans, idx) => (
                   <TransactionCard
                     key={idx}
                     id={trans.id}

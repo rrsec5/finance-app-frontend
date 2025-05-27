@@ -26,3 +26,11 @@
 .react-datepicker__day:hover {
   @apply text-button-text !bg-button-hover;
 }
+
+.react-datepicker__day--disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.react-datepicker__day--disabled:hover {
+  @apply !bg-transparent !text-text-secondary;
+}

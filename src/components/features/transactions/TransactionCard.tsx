@@ -5,6 +5,7 @@ import * as motion from 'motion/react-client'
 import { EditTransModal } from './EditTransModal'
 import { DeleteTransModal } from './DeleteTransModal'
 import { TransactionTypeNumberId } from '../../../interfaces/Interfaces'
+//import useCategories from '../../../hooks/category/useCategories'
 
 type TransactionCardProps = TransactionTypeNumberId & {
   setTransactions: React.Dispatch<
@@ -26,6 +27,8 @@ export const TransactionCard = ({
   const [menuOpen, setMenuOpen] = useState(false)
   const [isEditTransModalOpen, setIsEditTransModalOpen] = useState(false)
   const [isDeleteTransModalOpen, setIsDeleteTransModalOpen] = useState(false)
+  //const { categories, loading, error } = useCategories()
+  //const currentCategory = categories.find((cat) => cat.id === categoryId)
 
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -77,6 +80,17 @@ export const TransactionCard = ({
     <div className="w-full bg-surface rounded-2xl shadow-md p-4 flex items-center justify-between mb-4">
       <div className="flex items-center">
         <LuArrowLeftRight className="text-text-secondary w-6 h-6 mr-4" />
+
+        {/* {loading ? (
+          <div className="w-6 h-6 mr-4 animate-pulse bg-gray-200 rounded-full" />
+        ) : error ? (
+          <div className="text-error mt-4">!!!</div>
+        ) : (
+          <div className="text-text-secondary text-2xl mr-4">
+            {currentCategory?.icon ?? '❓'}
+          </div>
+        )} */}
+
         <div>
           <p className={`text-h2 font-bold font-lato ${getAmountStyle()}`}>
             {getSign()}

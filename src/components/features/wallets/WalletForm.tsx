@@ -113,6 +113,10 @@ export const WalletForm = ({
                     'Only up to 2 decimal places allowed'
                   )
                 },
+                isPositive: (value) => {
+                  const numeric = parseFloat(value.replace(',', '.'))
+                  return numeric >= 0 || 'Balance cannot be negative'
+                },
               },
             })}
             disabled={isEditing}
