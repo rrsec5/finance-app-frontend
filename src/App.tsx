@@ -10,12 +10,12 @@ import { SignUp } from './pages/signup/SignUp'
 import { LogIn } from './pages/login/LogIn'
 import { ProtectedRoute } from './ProtectedRoute'
 import { CustomToaster } from './components/UI/CustomToaster'
-
+import { AuthProvider } from './providers/AuthProvider'
 
 function App(): JSX.Element {
   return (
     <Router>
-      <AppProviders>
+      <AuthProvider>
         <CustomToaster />
         <Routes>
           <Route path="/signup" element={<SignUp />} />
@@ -25,19 +25,22 @@ function App(): JSX.Element {
             path="*"
             element={
               <ProtectedRoute>
-                <MainLayout>
-                  <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/wallets" element={<Wallets />} />
-                    <Route path="/wallets/:id" element={<WalletDetail />} />
-                  </Routes>
-                </MainLayout>
+                {/* !!!!! мб можно убрать просто AppProviders и его логику запихнуть внутрь ProtectedRoute? !!!!!*/}
+                <AppProviders>
+                  <MainLayout>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/wallets" element={<Wallets />} />
+                      <Route path="/wallets/:id" element={<WalletDetail />} />
+                    </Routes>
+                  </MainLayout>
+                </AppProviders>
               </ProtectedRoute>
             }
           />
         </Routes>
-      </AppProviders>
+      </AuthProvider>
     </Router>
   )
 }

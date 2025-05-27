@@ -11,6 +11,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import '../../../styles/datepicker-overrides.css'
 import { CustomDatePickerInput } from './CustomDatePickerInput'
 import useCategories from '../../../hooks/category/useCategories'
+import { useState } from 'react'
+//import { toast } from 'sonner'
 
 interface TransFormProps {
   setOpen: (value: boolean) => void
@@ -56,7 +58,19 @@ export const TransactionForm = ({
   const { wallets, selectedWallet, setSelectedWalletId, selectedWalletId } =
     useWallet()
 
+  const [balanceError, setBalanceError] = useState<string | null>(null)
+
   const handleFormSubmit = (data: TransactionTypeString) => {
+    setBalanceError(null)
+
+    if (data.type === 'EXPENSE' && selectedWallet) {
+      const amount = parseFloat(data.amount.replace(',', '.')) || 0
+      if (selectedWallet.balance - amount < 0) {
+        setBalanceError('Insufficient wallet balance')
+        //toast.error('Insufficient wallet balance')
+        return
+      }
+    }
     if (defaultValues?.id) {
       onSubmit({ ...data, id: defaultValues.id })
     } else {
@@ -139,6 +153,10 @@ export const TransactionForm = ({
                       'Only up to 2 decimal places allowed'
                     )
                   },
+                  isPositive: (value) => {
+                    const numeric = parseFloat(value.replace(',', '.'))
+                    return numeric >= 0 || 'Balance cannot be negative'
+                  },
                 },
               })}
               className="w-full p-2 border-2 border-border rounded pr-14 text-text-primary mt-1 font-lato"
@@ -155,6 +173,9 @@ export const TransactionForm = ({
           </div>
           {errors.amount && (
             <p className="text-error text-sm mt-1">{errors.amount.message}</p>
+          )}
+          {balanceError && (
+            <p className="text-error text-sm mt-1">{balanceError}</p>
           )}
         </div>
         <div className="w-1/2">
@@ -194,7 +215,7 @@ export const TransactionForm = ({
           </select>
         </div>
       ) : error ? (
-        <div className="text-error mt-4">Error loading transactions.</div>
+        <div className="text-error mt-4">Error loading categories.</div>
       ) : (
         <div>
           <label className="block text-sm font-medium text-text-secondary">
@@ -233,6 +254,7 @@ export const TransactionForm = ({
               selected={field.value}
               onChange={(date) => field.onChange(date)}
               dateFormat="dd-MM-yyyy"
+              maxDate={new Date()}
               className="w-full p-2 border-2 border-border rounded bg-elevation-2 text-text-primary cursor-pointer"
               wrapperClassName="w-full"
               customInput={<CustomDatePickerInput />}
