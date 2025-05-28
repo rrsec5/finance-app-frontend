@@ -29,6 +29,11 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     loadWallets()
   }, [])
 
+  const refetchWallets = async () => {
+    const response = await fetchWallets()
+    setWallets(response.data)
+  }
+
   const selectedWallet = wallets.find(
     (wallet) => wallet.id === selectedWalletId,
   )
@@ -43,6 +48,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setSelectedWalletId,
         loading,
         error,
+        refetchWallets,
       }}
     >
       {children}

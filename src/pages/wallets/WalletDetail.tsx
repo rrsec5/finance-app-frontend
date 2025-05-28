@@ -16,8 +16,14 @@ export const WalletDetail = () => {
   const [isEditWalletModalOpen, setIsEditWalletModalOpen] = useState(false)
   const [isDeleteWalletModalOpen, setIsDeleteWalletModalOpen] = useState(false)
 
-  const { wallets, selectedWalletId, selectedWallet, setSelectedWalletId, setWallets } =
-    useWallet()
+  const {
+    wallets,
+    selectedWalletId,
+    selectedWallet,
+    setSelectedWalletId,
+    setWallets,
+    refetchWallets,
+  } = useWallet()
   const { setTitle } = usePageTitle()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -134,6 +140,7 @@ export const WalletDetail = () => {
           setOpen={setIsCreateTransactionModelOpen}
           walletId={selectedWalletId}
           setTransactions={setTransactions}
+          refetchWallets={refetchWallets}
         />
         {loading ? (
           <div className="mt-4 flex justify-center">
@@ -145,6 +152,7 @@ export const WalletDetail = () => {
           <TransactionList
             transactions={filteredTransactions}
             setTransactions={setTransactions}
+            refetchWallets={refetchWallets}
           />
         )}
       </div>

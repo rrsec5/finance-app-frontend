@@ -23,7 +23,10 @@ export const TransactionCard = ({
   createdAt,
   currency,
   setTransactions,
-}: TransactionCardProps) => {
+  refetchWallets,
+}: TransactionCardProps & {
+  refetchWallets: () => void
+}) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [isEditTransModalOpen, setIsEditTransModalOpen] = useState(false)
   const [isDeleteTransModalOpen, setIsDeleteTransModalOpen] = useState(false)
@@ -137,6 +140,7 @@ export const TransactionCard = ({
           categoryId={categoryId}
           createdAt={createdAt}
           setTransactions={setTransactions}
+          refetchWallets={refetchWallets}
         />
         <DeleteTransModal
           open={isDeleteTransModalOpen}
@@ -145,6 +149,7 @@ export const TransactionCard = ({
           onDeleted={() => {
             setTransactions((prev) => prev.filter((t) => t.id !== id))
           }}
+          refetchWallets={refetchWallets}
         />
       </div>
     </div>

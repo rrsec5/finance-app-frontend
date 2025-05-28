@@ -24,14 +24,19 @@ export const EditTransModal = ({
   createdAt,
   currency,
   setTransactions,
-}: EditTransModalProps) => {
+  refetchWallets,
+}: EditTransModalProps & {
+  refetchWallets: () => void
+}) => {
   const { handleEditTransaction } = useEditTransaction(
     undefined,
     setTransactions,
+    refetchWallets,
   )
 
   const handleSave = (data: TransactionTypeStringId) => {
     handleEditTransaction(id, data)
+    refetchWallets()
     setOpen(false)
   }
   return (

@@ -13,11 +13,15 @@ export const DeleteTransModal = ({
   setOpen,
   id,
   onDeleted,
-}: DeleteTransModalProps) => {
+  refetchWallets
+}: DeleteTransModalProps & {
+  refetchWallets: () => void
+}) => {
   const { handleDeleteTransaction } = useDeleteTransaction()
   const handleDelete = (id: string) => {
     handleDeleteTransaction(id, () => {
       onDeleted?.()
+      refetchWallets()
       setOpen(false)
     })
   }
