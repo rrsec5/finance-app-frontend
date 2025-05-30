@@ -16,7 +16,7 @@ export const Dashboard = () => {
   const { setTitle } = usePageTitle()
 
   const { transactions, loading, error, setTransactions } = useTransactions()
-  const { setWallets } = useWallet()
+  const { setWallets, refetchWallets } = useWallet()
 
   useEffect(() => {
     setTitle('Dashboard')
@@ -69,6 +69,7 @@ export const Dashboard = () => {
                     createdAt={trans.createdAt}
                     currency={trans.currency}
                     setTransactions={setTransactions}
+                    refetchWallets={refetchWallets}
                   />
                 ))}
               </div>
@@ -97,6 +98,7 @@ export const Dashboard = () => {
         setOpen={setIsCreateTransactionModelOpen}
         showWalletSelection={true}
         setTransactions={setTransactions}
+        refetchWallets={refetchWallets}
       />
     </>
   )

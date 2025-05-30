@@ -10,6 +10,7 @@ export const userCreateTransaction = (
   setTransactions?: React.Dispatch<
     React.SetStateAction<TransactionTypeNumberId[]>
   >,
+  refetchWallets?: () => void,
 ) => {
   const handleCreateTransaction = async (data: TransactionTypeString) => {
     const transactionData = {
@@ -25,10 +26,12 @@ export const userCreateTransaction = (
     await toast.promise(
       createTransaction(transactionData).then((res) => {
         const newTransaction = res.data
-        
+
         if (setTransactions) {
           setTransactions((prev) => [newTransaction, ...prev])
         }
+
+        refetchWallets?.()
 
         onSuccess?.()
       }),

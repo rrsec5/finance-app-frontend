@@ -8,7 +8,13 @@ interface TransactionListProps {
   >
 }
 
-export const TransactionList = ({ transactions, setTransactions }: TransactionListProps) => {
+export const TransactionList = ({
+  transactions,
+  setTransactions,
+  refetchWallets,
+}: TransactionListProps & {
+  refetchWallets: () => void
+}) => {
   if (transactions.length === 0) {
     return (
       <p className="text-center text-text-secondary mt-10 text-h3 font-lato">
@@ -74,6 +80,7 @@ export const TransactionList = ({ transactions, setTransactions }: TransactionLi
                       createdAt={trans.createdAt}
                       currency={trans.currency}
                       setTransactions={setTransactions}
+                      refetchWallets={refetchWallets}
                     />
                   ))}
               </div>

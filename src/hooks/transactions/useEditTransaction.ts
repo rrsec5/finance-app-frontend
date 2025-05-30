@@ -10,6 +10,7 @@ export const useEditTransaction = (
   setTransactions?: React.Dispatch<
     React.SetStateAction<TransactionTypeNumberId[]>
   >,
+  refetchWallets?: () => void,
 ) => {
   const handleEditTransaction = async (
     transactionId: string,
@@ -36,6 +37,8 @@ export const useEditTransaction = (
             ),
           )
         }
+
+        refetchWallets?.()
 
         onSuccess?.()
       }),

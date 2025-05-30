@@ -16,10 +16,14 @@ export const CreateTransModal = ({
   showWalletSelection = false,
   walletId,
   setTransactions,
-}: CreateTransModalProps) => {
+  refetchWallets,
+}: CreateTransModalProps & {
+  refetchWallets: () => void
+}) => {
   const { handleCreateTransaction } = userCreateTransaction(
     () => setOpen(false),
-    setTransactions
+    setTransactions,
+    refetchWallets,
   )
 
   return (

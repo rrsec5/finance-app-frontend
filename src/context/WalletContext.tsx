@@ -9,6 +9,7 @@ type WalletContextType = {
   setSelectedWalletId: (id: string) => void
   loading: boolean
   error: null | string
+  refetchWallets: () => void
 }
 
 export const WalletContext = createContext<WalletContextType | undefined>(
