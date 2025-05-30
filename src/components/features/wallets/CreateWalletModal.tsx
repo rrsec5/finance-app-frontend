@@ -22,7 +22,7 @@ export const CreateWalletModal = ({
       title="Add Wallet"
       open={open}
       setOpen={setOpen}
-      onSave={handleCreateWallet}
+      onSave={(data, setError) => handleCreateWallet(data, setError)}
     />
   )
 }

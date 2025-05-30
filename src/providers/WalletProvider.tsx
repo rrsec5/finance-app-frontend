@@ -9,8 +9,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [selectedWalletId, setSelectedWalletId] = useState<string>(
     wallets[0]?.id,
   )
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<null | string>(null)
+  const [walletLoading, setLoading] = useState(true)
+  const [walletError, setError] = useState<null | string>(null)
 
   useEffect(() => {
     const loadWallets = async () => {
@@ -46,8 +46,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         selectedWalletId,
         selectedWallet,
         setSelectedWalletId,
-        loading,
-        error,
+        walletLoading,
+        walletError,
         refetchWallets,
       }}
     >

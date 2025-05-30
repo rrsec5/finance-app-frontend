@@ -2,6 +2,7 @@ import { useEditWallet } from '../../../hooks/wallets/useEditWallet'
 import {
   ModalControl,
   WalletTypeNumberId,
+  WalletTypeString,
   WalletTypeStringId,
 } from '../../../interfaces/Interfaces'
 import { BaseWalletModal } from './BaseWalletModal'
@@ -20,15 +21,21 @@ export const EditWalletModal = ({
   setWallets: React.Dispatch<React.SetStateAction<WalletTypeNumberId[]>>
 }) => {
   const { handleEditWallet } = useEditWallet(() => setOpen(false), setWallets)
-  const handleSave = (data: WalletTypeStringId) => {
-    handleEditWallet(id, data)
+  const handleSave = (
+    data: WalletTypeStringId,
+    setError?: (
+      name: keyof WalletTypeString,
+      error: { message: string },
+    ) => void,
+  ) => {
+    handleEditWallet(id, data, setError)
     setOpen(false)
   }
 
   return (
     <BaseWalletModal
       title="Edit Wallet"
-      onSave={handleSave}
+      onSave={(data, setError) => handleSave(data, setError)}
       open={open}
       setOpen={setOpen}
       defaultValues={{

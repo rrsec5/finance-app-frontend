@@ -22,6 +22,8 @@ export const WalletDetail = () => {
     selectedWallet,
     setSelectedWalletId,
     setWallets,
+    walletLoading,
+    walletError,
     refetchWallets,
   } = useWallet()
   const { setTitle } = usePageTitle()
@@ -49,68 +51,79 @@ export const WalletDetail = () => {
     setSelectedWalletId(newId)
     await navigate(`/wallets/${newId}`)
   }
-  if (!selectedWallet)
-    return (
-      <div className="font-montserrat text-display text-center">
-        Page not found
-      </div>
-    )
+
+  // if (!selectedWallet)
+  //   return (
+  //     <div className="font-montserrat text-display text-center">
+  //       Page not found
+  //     </div>
+  //   )
 
   const filteredTransactions = transactions.filter(
     (transaction) => transaction.walletId === selectedWalletId,
   )
 
   return (
-    <div className="flex text-text-primary gap-8">
-      <div className="w-3/5">
-        <div className="mb-6 w-full flex items-center justify-between">
-          <select
-            value={selectedWalletId}
-            onChange={handleWalletChange}
-            className="w-1/3 p-2 bg-surface text-text-primary font-lato text-h3 rounded-lg"
-          >
-            {/*тут в идеале нужно написать свой компонент для выпадающего списка*/}
-            {wallets.map((wallet) => (
-              <option key={wallet.id} value={wallet.id}>
-                {wallet.name} - {wallet.balance} {wallet.currency}
-              </option>
-            ))}
-          </select>
-
-          <div className="grid grid-cols-2 mr-4">
-            <IconButton
-              onClick={() => setIsEditWalletModalOpen(true)}
-              Icon={LuFolderPen}
-              isPadding={true}
-            />
-            <EditWalletModal
-              open={isEditWalletModalOpen}
-              setOpen={setIsEditWalletModalOpen}
-              id={selectedWalletId}
-              name={selectedWallet.name}
-              currency={selectedWallet.currency}
-              balance={selectedWallet.balance}
-              setWallets={setWallets}
-            />
-
-            <IconButton
-              onClick={() => setIsDeleteWalletModalOpen(true)}
-              Icon={LuTrash2}
-              isPadding={true}
-            />
-            <DeleteWalletModal
-              open={isDeleteWalletModalOpen}
-              setOpen={setIsDeleteWalletModalOpen}
-              id={selectedWalletId}
-              name={selectedWallet.name}
-              currency={selectedWallet.currency}
-              balance={selectedWallet.balance}
-              setWallets={setWallets}
-            />
-          </div>
+    <>
+      {walletLoading ? (
+        <LoadingCircleSpinner />
+      ) : walletError ? (
+        <div className="text-error mt-4">{walletError}</div>
+      ) : !selectedWallet ? (
+        <div className="font-montserrat text-display text-center">
+          Page not found
         </div>
-        {/* затычка на потом - баланс скорее всего перемещу в правую часть */}
-        {/* <div className="w-full">
+      ) : (
+        <div className="flex text-text-primary gap-8">
+          <div className="w-3/5">
+            <div className="mb-6 w-full flex items-center justify-between">
+              <select
+                value={selectedWalletId}
+                onChange={handleWalletChange}
+                className="w-1/3 p-2 bg-surface text-text-primary font-lato text-h3 rounded-lg"
+              >
+                {/*тут в идеале нужно написать свой компонент для выпадающего списка*/}
+                {wallets.map((wallet) => (
+                  <option key={wallet.id} value={wallet.id}>
+                    {wallet.name} - {wallet.balance} {wallet.currency}
+                  </option>
+                ))}
+              </select>
+
+              <div className="grid grid-cols-2 mr-4">
+                <IconButton
+                  onClick={() => setIsEditWalletModalOpen(true)}
+                  Icon={LuFolderPen}
+                  isPadding={true}
+                />
+                <EditWalletModal
+                  open={isEditWalletModalOpen}
+                  setOpen={setIsEditWalletModalOpen}
+                  id={selectedWalletId}
+                  name={selectedWallet.name}
+                  currency={selectedWallet.currency}
+                  balance={selectedWallet.balance}
+                  setWallets={setWallets}
+                />
+
+                <IconButton
+                  onClick={() => setIsDeleteWalletModalOpen(true)}
+                  Icon={LuTrash2}
+                  isPadding={true}
+                />
+                <DeleteWalletModal
+                  open={isDeleteWalletModalOpen}
+                  setOpen={setIsDeleteWalletModalOpen}
+                  id={selectedWalletId}
+                  name={selectedWallet.name}
+                  currency={selectedWallet.currency}
+                  balance={selectedWallet.balance}
+                  setWallets={setWallets}
+                />
+              </div>
+            </div>
+            {/* затычка на потом - баланс скорее всего перемещу в правую часть */}
+            {/* <div className="w-full">
           {selectedWallet ? (
             <div>
               <p className="mb-2 font-lato font bold text-h3 text-color">
@@ -124,41 +137,43 @@ export const WalletDetail = () => {
           )}
         </div> */}
 
-        <div className="w-full flex items-center justify-between">
-          <div className="text-text-secondary font-bold font-montserrat text-h3">
-            Transactions
+            <div className="w-full flex items-center justify-between">
+              <div className="text-text-secondary font-bold font-montserrat text-h3">
+                Transactions
+              </div>
+              <Button
+                onClick={() => setIsCreateTransactionModelOpen(true)}
+                text="Add Transaction"
+                fullwidth={false}
+                defpadding={false}
+              />
+            </div>
+            <CreateTransModal
+              open={isCreateTransactionModelOpen}
+              setOpen={setIsCreateTransactionModelOpen}
+              walletId={selectedWalletId}
+              setTransactions={setTransactions}
+              refetchWallets={refetchWallets}
+            />
+            {loading ? (
+              <div className="mt-4 flex justify-center">
+                <LoadingCircleSpinner />
+              </div>
+            ) : error ? (
+              <div className="text-error mt-4 text-center">{error}</div>
+            ) : (
+              <TransactionList
+                transactions={filteredTransactions}
+                setTransactions={setTransactions}
+                refetchWallets={refetchWallets}
+              />
+            )}
           </div>
-          <Button
-            onClick={() => setIsCreateTransactionModelOpen(true)}
-            text="Add Transaction"
-            fullwidth={false}
-            defpadding={false}
-          />
-        </div>
-        <CreateTransModal
-          open={isCreateTransactionModelOpen}
-          setOpen={setIsCreateTransactionModelOpen}
-          walletId={selectedWalletId}
-          setTransactions={setTransactions}
-          refetchWallets={refetchWallets}
-        />
-        {loading ? (
-          <div className="mt-4 flex justify-center">
-            <LoadingCircleSpinner />
-          </div>
-        ) : error ? (
-          <div className="text-error mt-4 text-center">{error}</div>
-        ) : (
-          <TransactionList
-            transactions={filteredTransactions}
-            setTransactions={setTransactions}
-            refetchWallets={refetchWallets}
-          />
-        )}
-      </div>
 
-      {/* Правая часть */}
-      <div className="w-2/5 ">{/* Пока пусто */}</div>
-    </div>
+          {/* Правая часть */}
+          <div className="w-2/5 ">{/* Пока пусто */}</div>
+        </div>
+      )}
+    </>
   )
 }

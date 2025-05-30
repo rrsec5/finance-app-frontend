@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormSetError } from 'react-hook-form'
 import { LuEye, LuEyeOff } from 'react-icons/lu'
 import { Button } from '../../UI/Button'
 import { SignUpFormValues } from '../../../interfaces/Interfaces'
 
 type SignUpFormProps = {
-  onSubmit: (data: SignUpFormValues) => void
+  onSubmit: (
+    data: SignUpFormValues,
+    setError?: UseFormSetError<SignUpFormValues>,
+  ) => void
   showNameField?: boolean
   buttonText?: string
   bottomText?: string
@@ -25,6 +28,7 @@ export const SignUpForm = ({
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors, isValid },
   } = useForm<SignUpFormValues>({
     mode: 'onChange',
@@ -33,10 +37,13 @@ export const SignUpForm = ({
   const nameValue = watch('name')
   const emailValue = watch('email')
   const passwordValue = watch('password')
+  const handleFormSubmit = (data: SignUpFormValues) => {
+    onSubmit(data, setError)
+  }
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleFormSubmit)}
       className="bg-elevation-1 p-8 rounded-2xl shadow-md space-y-6"
     >
       {showNameField && (

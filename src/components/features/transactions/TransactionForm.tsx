@@ -1,4 +1,4 @@
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, useWatch } from 'react-hook-form'
 import { Button } from '../../UI/Button'
 import {
   TransactionTypeString,
@@ -11,7 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import '../../../styles/datepicker-overrides.css'
 import { CustomDatePickerInput } from './CustomDatePickerInput'
 import useCategories from '../../../hooks/category/useCategories'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 //import { toast } from 'sonner'
 
 interface TransFormProps {
@@ -35,6 +35,7 @@ export const TransactionForm = ({
     watch,
     control,
     formState: { errors, isValid },
+    setValue,
   } = useForm<TransactionTypeString>({
     mode: 'onChange',
     defaultValues: {
@@ -53,6 +54,11 @@ export const TransactionForm = ({
   const categoryIdValue = watch('categoryId')
   const types = ['EXPENSE', 'INCOME']
 
+  const selectedType = useWatch({
+    control,
+    name: 'type',
+  })
+
   const { categories, loading, error } = useCategories()
 
   const { wallets, selectedWallet, setSelectedWalletId, selectedWalletId } =
@@ -67,7 +73,6 @@ export const TransactionForm = ({
       const amount = parseFloat(data.amount.replace(',', '.')) || 0
       if (selectedWallet.balance - amount < 0) {
         setBalanceError('Insufficient wallet balance')
-        //toast.error('Insufficient wallet balance')
         return
       }
     }
@@ -78,10 +83,41 @@ export const TransactionForm = ({
     }
   }
 
-  const selectedType = watch('type')
   const filteredCategories = categories.filter(
     (category) => category.type === selectedType,
   )
+
+  const prevTypeRef = useRef<string | undefined>(defaultValues?.type)
+  const firstRenderRef = useRef(true)
+
+  // Сохраняем исходные значения
+  const initialType = useRef(defaultValues?.type)
+  const initialCategoryId = useRef(defaultValues?.categoryId)
+
+  // Сброс значения categoryId при смене типа
+  useEffect(() => {
+    // Пропускаем первый рендер
+    if (firstRenderRef.current) {
+      firstRenderRef.current = false
+      return
+    }
+
+    // Если тип изменился, сбрасываем категорию
+    if (prevTypeRef.current !== selectedType) {
+      // Если тип вернулся к начальному — восстанавливаем категорию
+      if (
+        initialType.current &&
+        selectedType === initialType.current &&
+        initialCategoryId.current
+      ) {
+        setValue('categoryId', initialCategoryId.current)
+      } else {
+        // Иначе сбрасываем
+        setValue('categoryId', '')
+      }
+      prevTypeRef.current = selectedType
+    }
+  }, [selectedType, setValue])
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
