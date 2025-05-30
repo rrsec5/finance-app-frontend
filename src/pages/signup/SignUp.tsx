@@ -14,7 +14,8 @@ export const SignUp = () => {
         </h1>
 
         <SignUpForm
-          onSubmit={handleSignUp}
+          //onSubmit={handleSignUp}
+          onSubmit={(data, setError) => handleSignUp(data, setError)}
           onBottomTextClick={() => navigate('/login')}
         />
       </div>

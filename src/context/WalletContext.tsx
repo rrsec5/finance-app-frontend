@@ -7,8 +7,8 @@ type WalletContextType = {
   selectedWalletId: string
   selectedWallet: WalletTypeNumberId | undefined
   setSelectedWalletId: (id: string) => void
-  loading: boolean
-  error: null | string
+  walletLoading: boolean
+  walletError: null | string
   refetchWallets: () => void
 }
 

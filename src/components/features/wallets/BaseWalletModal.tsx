@@ -2,13 +2,22 @@ import { LuX } from 'react-icons/lu'
 import { IconButton } from '../../UI/IconButton'
 import { Modal } from '../../UI/Modal'
 import { WalletForm } from './WalletForm'
-import { WalletTypeStringId } from '../../../interfaces/Interfaces'
+import {
+  WalletTypeString,
+  WalletTypeStringId,
+} from '../../../interfaces/Interfaces'
 
 interface WalletModalProps {
   title: string
   open: boolean
   setOpen: (value: boolean) => void
-  onSave: (data: WalletTypeStringId) => void
+  onSave: (
+    data: WalletTypeStringId,
+    setError: (
+      name: keyof WalletTypeString,
+      error: { message: string },
+    ) => void,
+  ) => void
   defaultValues?: WalletTypeStringId
   showCancel?: boolean
   isEditing?: boolean

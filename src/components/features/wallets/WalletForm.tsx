@@ -6,7 +6,13 @@ import {
 } from '../../../interfaces/Interfaces'
 
 interface WalletFormProps {
-  onSubmit: (data: WalletTypeStringId) => void
+  onSubmit: (
+    data: WalletTypeStringId,
+    setError: (
+      name: keyof WalletTypeString,
+      error: { message: string },
+    ) => void,
+  ) => void
   defaultValues?: WalletTypeStringId
   setOpen: (value: boolean) => void
   showCancel?: boolean
@@ -24,6 +30,7 @@ export const WalletForm = ({
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors, isValid },
   } = useForm<WalletTypeString>({
     mode: 'onChange',
@@ -40,13 +47,10 @@ export const WalletForm = ({
   const balanceValue = watch('balance')
 
   const handleFormSubmit = (data: WalletTypeString) => {
-    //При редактировании добавляем id
-    if (defaultValues?.id) {
-      onSubmit({ ...data, id: defaultValues.id })
-    } else {
-      // При создании нового кошелька id не нужен
-      onSubmit(data as WalletTypeStringId)
-    }
+    const id = defaultValues?.id
+    const payload = id ? { ...data, id } : (data as WalletTypeStringId)
+
+    onSubmit(payload, setError)
   }
 
   return (

@@ -6,7 +6,7 @@ import { useWallet } from '../../hooks/wallets/UseWallet'
 
 export const Wallets = () => {
   const { setTitle } = usePageTitle()
-  const { wallets, loading, error } = useWallet()
+  const { wallets, walletLoading, walletError } = useWallet()
 
   useEffect(() => {
     setTitle('My Wallets')
@@ -14,10 +14,15 @@ export const Wallets = () => {
 
   return (
     <>
-      {loading ? (
+      {walletLoading ? (
         <LoadingCircleSpinner />
-      ) : error ? (
-        <div className="text-error mt-4">{error}</div>
+      ) : walletError ? (
+        <div className="text-error mt-4">{walletError}</div>
+      ) : !wallets || wallets.length === 0 ? (
+        <div className="font-montserrat text-2xl">
+          You haven't created any wallets yet. You can create a wallet on the
+          dashboard page
+        </div>
       ) : (
         <div className="grid grid-cols-3 justify-center gap-8 px-5">
           {wallets.map((wallet) => (
