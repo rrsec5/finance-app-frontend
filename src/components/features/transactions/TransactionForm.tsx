@@ -78,6 +78,11 @@ export const TransactionForm = ({
     }
   }
 
+  const selectedType = watch('type')
+  const filteredCategories = categories.filter(
+    (category) => category.type === selectedType,
+  )
+
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <Controller
@@ -226,12 +231,12 @@ export const TransactionForm = ({
               required: true,
             })}
             className={`w-full p-2 border-2 border-border rounded bg-elevation-2 
-            mt-1 transition cursor-pointer ${categoryIdValue ? 'text-text-primary' : 'text-text-secondary'}`}
+  mt-1 transition cursor-pointer ${categoryIdValue ? 'text-text-primary' : 'text-text-secondary'}`}
           >
             <option value="" disabled hidden>
               Select category
             </option>
-            {categories.map((category) => (
+            {filteredCategories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.icon} {category.name}
               </option>
