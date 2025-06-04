@@ -5,6 +5,7 @@ import {
   LuLogOut,
   LuSettings,
   LuWallet,
+  LuChartLine,
 } from 'react-icons/lu'
 import { NavLink } from 'react-router-dom'
 import { useLogOut } from '../../hooks/auth/useLogOut'
@@ -50,6 +51,14 @@ export const Sidebar = () => {
                 <div className="flex items-center gap-2">
                   <LuSettings size={20} />
                   Settings
+                </div>
+              </NavLink>
+            </motion.li>
+            <motion.li whileTap={{ scale: 0.9 }}>
+              <NavLink to="/reports" className={linkClasses}>
+                <div className="flex items-center gap-2">
+                  <LuChartLine size={20} />
+                  Reports
                 </div>
               </NavLink>
             </motion.li>

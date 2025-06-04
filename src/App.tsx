@@ -12,6 +12,7 @@ import { ProtectedRoute } from './ProtectedRoute'
 import { CustomToaster } from './components/UI/CustomToaster'
 import { AuthProvider } from './providers/AuthProvider'
 import { OAuthCallback } from './pages/OAuthCallback'
+import { Reports } from './pages/reports/Reports'
 
 function App(): JSX.Element {
   return (
@@ -33,6 +34,7 @@ function App(): JSX.Element {
                     <Routes>
                       <Route path="/" element={<Dashboard />} />
                       <Route path="/settings" element={<Settings />} />
+                      <Route path="/reports" element={<Reports />} />
                       <Route path="/wallets" element={<Wallets />} />
                       <Route path="/wallets/:id" element={<WalletDetail />} />
                     </Routes>
