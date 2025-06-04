@@ -11,6 +11,7 @@ import { LogIn } from './pages/login/LogIn'
 import { ProtectedRoute } from './ProtectedRoute'
 import { CustomToaster } from './components/UI/CustomToaster'
 import { AuthProvider } from './providers/AuthProvider'
+import { OAuthCallback } from './pages/OAuthCallback'
 
 function App(): JSX.Element {
   return (
@@ -20,6 +21,7 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<LogIn />} />
+          <Route path="/auth/callback" element={<OAuthCallback />} />
 
           <Route
             path="*"
