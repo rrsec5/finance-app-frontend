@@ -46,7 +46,7 @@ export const SignUpForm = ({
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `http://localhost:5173/auth/callback`,
+        redirectTo: `https://nuredps-finance-app-dev.netlify.app/auth/callback`,
       },
     })
 
