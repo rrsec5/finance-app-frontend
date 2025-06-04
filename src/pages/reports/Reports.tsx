@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { useReports } from '../../hooks/reports/useReports'
 import { CustomDatePickerInput } from '../../components/features/transactions/CustomDatePickerInput'
@@ -6,6 +6,9 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import '../../styles/datepicker-overrides.css'
 import { LoadingCircleSpinner } from '../../components/UI/LoadingCircleSpinner'
+import { Toggle } from '../../components/UI/Toggle'
+import { ReportsTable } from '../../components/features/reports/ReportsTable'
+import { ReportsChart } from '../../components/features/reports/ReportsChart'
 
 export const Reports = () => {
   const { setTitle } = usePageTitle()
@@ -19,14 +22,16 @@ export const Reports = () => {
     error,
   } = useReports()
 
+  const [view, setView] = useState<'table' | 'chart'>('table')
+
   useEffect(() => {
     setTitle('Reports')
   }, [setTitle])
 
   return (
-    <div className="p-4 space-y-6">
-      <div className="flex gap-4">
-        <div className="w-1/2">
+    <div className="p-4 space-y-6 max-w-3xl mx-auto">
+      <div className="flex flex-col md:flex-row gap-4 justify-between items-end">
+        <div className="flex-1">
           <label className="block text-sm font-medium text-text-secondary mb-1">
             From
           </label>
@@ -39,7 +44,7 @@ export const Reports = () => {
             customInput={<CustomDatePickerInput />}
           />
         </div>
-        <div className="w-1/2">
+        <div className="flex-1">
           <label className="block text-sm font-medium text-text-secondary mb-1">
             To
           </label>
@@ -52,46 +57,26 @@ export const Reports = () => {
             customInput={<CustomDatePickerInput />}
           />
         </div>
+        <Toggle
+          pressed={view === 'chart'}
+          onPressedChange={() => setView(view === 'table' ? 'chart' : 'table')}
+        >
+          {view === 'table' ? 'Switch to Chart' : 'Switch to Table'}
+        </Toggle>
       </div>
 
       {loading ? (
-        <LoadingCircleSpinner/>
+        <LoadingCircleSpinner />
       ) : error ? (
         <p className="text-error">Failed to load data</p>
+      ) : data.length === 0 ? (
+        <p className="text-text-secondary">
+          No data available for this period.
+        </p>
+      ) : view === 'table' ? (
+        <ReportsTable data={data} />
       ) : (
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Expenses by category:</h2>
-          {data.length === 0 ? (
-            <p className="text-text-secondary">
-              No data available for this period.
-            </p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-left border border-border rounded overflow-hidden">
-                <thead className="bg-elevation-2">
-                  <tr>
-                    <th className="px-4 py-2 text-text-secondary">Category</th>
-                    <th className="px-4 py-2 text-text-secondary">Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((entry) => (
-                    <tr
-                      key={entry.categoryId}
-                      className="border-t border-border"
-                    >
-                      <td className="px-4 py-2 flex items-center gap-2">
-                        <span>{entry.icon}</span>
-                        <span>{entry.name}</span>
-                      </td>
-                      <td className="px-4 py-2">{entry.total}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+        <ReportsChart data={data} />
       )}
     </div>
   )
