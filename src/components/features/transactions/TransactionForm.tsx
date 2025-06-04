@@ -69,9 +69,19 @@ export const TransactionForm = ({
   const handleFormSubmit = (data: TransactionTypeString) => {
     setBalanceError(null)
 
+    //намудрил тут сильно, потому что если у нас сначала был income и мы меняли на expense, то не работало
     if (data.type === 'EXPENSE' && selectedWallet) {
       const amount = parseFloat(data.amount.replace(',', '.')) || 0
-      if (selectedWallet.balance - amount < 0) {
+      const originalAmountWithoutType = parseFloat(
+        defaultValues?.amount ? defaultValues?.amount?.replace(',', '.') : '0',
+      )
+      const originalAmount = defaultValues?.type
+        ? defaultValues?.type === 'EXPENSE'
+          ? originalAmountWithoutType
+          : -1 * originalAmountWithoutType
+        : originalAmountWithoutType
+
+      if (selectedWallet.balance - (amount - originalAmount) < 0) {
         setBalanceError('Insufficient wallet balance')
         return
       }
@@ -196,7 +206,7 @@ export const TransactionForm = ({
                   },
                   isPositive: (value) => {
                     const numeric = parseFloat(value.replace(',', '.'))
-                    return numeric >= 0 || 'Balance cannot be negative'
+                    return numeric > 0 || 'Amount must be greater than zero'
                   },
                 },
               })}

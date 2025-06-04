@@ -47,18 +47,18 @@ export const Sidebar = () => {
               </NavLink>
             </motion.li>
             <motion.li whileTap={{ scale: 0.9 }}>
-              <NavLink to="/settings" className={linkClasses}>
-                <div className="flex items-center gap-2">
-                  <LuSettings size={20} />
-                  Settings
-                </div>
-              </NavLink>
-            </motion.li>
-            <motion.li whileTap={{ scale: 0.9 }}>
               <NavLink to="/reports" className={linkClasses}>
                 <div className="flex items-center gap-2">
                   <LuChartLine size={20} />
                   Reports
+                </div>
+              </NavLink>
+            </motion.li>
+            <motion.li whileTap={{ scale: 0.9 }}>
+              <NavLink to="/settings" className={linkClasses}>
+                <div className="flex items-center gap-2">
+                  <LuSettings size={20} />
+                  Settings
                 </div>
               </NavLink>
             </motion.li>
