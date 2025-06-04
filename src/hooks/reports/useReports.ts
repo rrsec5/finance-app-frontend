@@ -4,6 +4,8 @@ import { getCategorySummary, getDatesRange } from '../../api/reports/reportsApi'
 export const useReports = () => {
   const [fromDate, setFromDate] = useState<Date | null>(null)
   const [toDate, setToDate] = useState<Date | null>(null)
+  const [minDate, setMinDate] = useState<Date | null>(null)
+  const [maxDate, setMaxDate] = useState<Date | null>(null)
   const [data, setData] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -12,8 +14,13 @@ export const useReports = () => {
     getDatesRange()
       .then((res) => {
         const { minDate, maxDate } = res.data
-        setFromDate(new Date(minDate))
-        setToDate(new Date(maxDate))
+        const min = new Date(minDate)
+        const max = new Date(maxDate)
+
+        setMinDate(min)
+        setMaxDate(max)
+        setFromDate(min)
+        setToDate(max)
       })
       .catch(() => setError(true))
   }, [])
@@ -42,6 +49,8 @@ export const useReports = () => {
   return {
     fromDate,
     toDate,
+    minDate,
+    maxDate,
     handleFromChange,
     handleToChange,
     data,

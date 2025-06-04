@@ -17,6 +17,8 @@ export const Reports = () => {
     toDate,
     handleFromChange,
     handleToChange,
+    minDate,
+    maxDate,
     data,
     loading,
     error,
@@ -31,32 +33,53 @@ export const Reports = () => {
   return (
     <div className="p-4 space-y-6 max-w-3xl mx-auto">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-end">
+        {/* FROM DATE */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-text-secondary mb-1">
             From
           </label>
-          <DatePicker
-            selected={fromDate}
-            onChange={(date) => date && handleFromChange(date)}
-            dateFormat="dd-MM-yyyy"
-            maxDate={new Date()}
-            className="w-full p-2 border-2 border-border rounded bg-elevation-2 text-text-primary cursor-pointer"
-            customInput={<CustomDatePickerInput />}
-          />
+          <div className="flex gap-2">
+            <DatePicker
+              selected={fromDate}
+              onChange={(date) => date && handleFromChange(date)}
+              dateFormat="dd-MM-yyyy"
+              maxDate={new Date()}
+              className="w-full p-2 border-2 border-border rounded bg-elevation-2 text-text-primary cursor-pointer"
+              customInput={<CustomDatePickerInput />}
+            />
+            <button
+              onClick={() => handleFromChange(minDate)}
+              className="px-2 py-1 text-sm border border-border rounded bg-elevation-2 hover:bg-elevation-3 cursor-pointer"
+            >
+              Reset
+            </button>
+          </div>
         </div>
+
+        {/* TO DATE */}
         <div className="flex-1">
           <label className="block text-sm font-medium text-text-secondary mb-1">
             To
           </label>
-          <DatePicker
-            selected={toDate}
-            onChange={(date) => date && handleToChange(date)}
-            dateFormat="dd-MM-yyyy"
-            maxDate={new Date()}
-            className="w-full p-2 border-2 border-border rounded bg-elevation-2 text-text-primary cursor-pointer"
-            customInput={<CustomDatePickerInput />}
-          />
+          <div className="flex gap-2">
+            <DatePicker
+              selected={toDate}
+              onChange={(date) => date && handleToChange(date)}
+              dateFormat="dd-MM-yyyy"
+              maxDate={new Date()}
+              className="w-full p-2 border-2 border-border rounded bg-elevation-2 text-text-primary cursor-pointer"
+              customInput={<CustomDatePickerInput />}
+            />
+            <button
+              onClick={() => handleToChange(maxDate)}
+              className="px-2 py-1 text-sm border border-border rounded bg-elevation-2 hover:bg-elevation-3 cursor-pointer"
+            >
+              Reset
+            </button>
+          </div>
         </div>
+
+        {/* VIEW TOGGLE */}
         <Toggle
           pressed={view === 'chart'}
           onPressedChange={() => setView(view === 'table' ? 'chart' : 'table')}
@@ -65,6 +88,7 @@ export const Reports = () => {
         </Toggle>
       </div>
 
+      {/* CONTENT */}
       {loading ? (
         <LoadingCircleSpinner />
       ) : error ? (
