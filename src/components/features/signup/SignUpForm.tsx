@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { LuEye, LuEyeOff } from 'react-icons/lu'
 import { Button } from '../../UI/Button'
 import { SignUpFormValues } from '../../../interfaces/Interfaces'
+import { supabase } from '../../../config/supabaseClient'
 
 type SignUpFormProps = {
   onSubmit: (data: SignUpFormValues) => void
@@ -33,6 +34,21 @@ export const SignUpForm = ({
   const nameValue = watch('name')
   const emailValue = watch('email')
   const passwordValue = watch('password')
+
+  const handleGoogleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `http://localhost:5173/auth/callback`,
+      },
+    })
+
+    console.log(data)
+
+    if (error) {
+      console.error('Google login error:', error.message)
+    }
+  }
 
   return (
     <form
@@ -131,6 +147,7 @@ export const SignUpForm = ({
         )}
       </div>
       <Button text={buttonText} disabledCondition={!isValid} />
+      <Button text="Continue with Google" deftype onClick={handleGoogleLogin} />
       <div
         className="text-lato text-text-primary text-center cursor-pointer hover:underline hover:text-text-secondary"
         onClick={onBottomTextClick}
