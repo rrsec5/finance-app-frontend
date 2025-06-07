@@ -28,7 +28,6 @@ function App(): JSX.Element {
             path="*"
             element={
               <ProtectedRoute>
-                {/* !!!!! мб можно убрать просто AppProviders и его логику запихнуть внутрь ProtectedRoute? !!!!!*/}
                 <AppProviders>
                   <MainLayout>
                     <Routes>
