@@ -1,3 +1,4 @@
+import useCategories from '../../../hooks/category/useCategories'
 import { TransactionTypeNumberId } from '../../../interfaces/Interfaces'
 import { TransactionCard } from './TransactionCard'
 
@@ -15,6 +16,7 @@ export const TransactionList = ({
 }: TransactionListProps & {
   refetchWallets: () => void
 }) => {
+  const { categories, loading, error } = useCategories()
   if (transactions.length === 0) {
     return (
       <p className="text-center text-text-secondary mt-10 text-h3 font-lato">
@@ -81,6 +83,9 @@ export const TransactionList = ({
                       currency={trans.currency}
                       setTransactions={setTransactions}
                       refetchWallets={refetchWallets}
+                      categories={categories}
+                      loadingCategories={loading}
+                      errorCategories={error}
                     />
                   ))}
               </div>

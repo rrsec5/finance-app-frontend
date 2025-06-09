@@ -8,6 +8,7 @@ import { TransactionCard } from '../../components/features/transactions/Transact
 import { LoadingCircleSpinner } from '../../components/UI/LoadingCircleSpinner'
 import { useTransactions } from '../../hooks/transactions/useTransactions'
 import { useWallet } from '../../hooks/wallets/UseWallet'
+import useCategories from '../../hooks/category/useCategories'
 
 export const Dashboard = () => {
   const [isCreateWalletModalOpen, setIsWalletModalOpen] = useState(false)
@@ -17,6 +18,8 @@ export const Dashboard = () => {
 
   const { transactions, loading, error, setTransactions } = useTransactions()
   const { setWallets, refetchWallets } = useWallet()
+  
+  const { categories } = useCategories()
 
   useEffect(() => {
     setTitle('Dashboard')
@@ -70,6 +73,7 @@ export const Dashboard = () => {
                     currency={trans.currency}
                     setTransactions={setTransactions}
                     refetchWallets={refetchWallets}
+                    categories={categories}
                   />
                 ))}
               </div>
