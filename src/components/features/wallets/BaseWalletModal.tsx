@@ -1,0 +1,52 @@
+import { LuX } from 'react-icons/lu'
+import { IconButton } from '../../UI/IconButton'
+import { Modal } from '../../UI/Modal'
+import { WalletForm } from './WalletForm'
+import {
+  WalletTypeString,
+  WalletTypeStringId,
+} from '../../../interfaces/Interfaces'
+
+interface WalletModalProps {
+  title: string
+  open: boolean
+  setOpen: (value: boolean) => void
+  onSave: (
+    data: WalletTypeStringId,
+    setError: (
+      name: keyof WalletTypeString,
+      error: { message: string },
+    ) => void,
+  ) => void
+  defaultValues?: WalletTypeStringId
+  showCancel?: boolean
+  isEditing?: boolean
+}
+
+export const BaseWalletModal = ({
+  title,
+  open,
+  setOpen,
+  onSave,
+  defaultValues,
+  showCancel = false,
+  isEditing = false,
+}: WalletModalProps) => {
+  return (
+    <Modal open={open} setOpen={setOpen}>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-text-primary text-lg font-semibold font-montserrat">
+          {title}
+        </h2>
+        <IconButton onClick={() => setOpen(false)} Icon={LuX} />
+      </div>
+      <WalletForm
+        onSubmit={onSave}
+        defaultValues={defaultValues}
+        setOpen={setOpen}
+        showCancel={showCancel}
+        isEditing={isEditing}
+      />
+    </Modal>
+  )
+}

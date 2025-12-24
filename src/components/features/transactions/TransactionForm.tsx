@@ -1,0 +1,332 @@
+import { useForm, Controller, useWatch } from 'react-hook-form'
+import { Button } from '../../UI/Button'
+import {
+  TransactionTypeString,
+  TransactionTypeStringId,
+} from '../../../interfaces/Interfaces'
+import * as motion from 'motion/react-client'
+import { useWallet } from '../../../hooks/wallets/UseWallet'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import '../../../styles/datepicker-overrides.css'
+import { CustomDatePickerInput } from './CustomDatePickerInput'
+import useCategories from '../../../hooks/category/useCategories'
+import { useEffect, useRef, useState } from 'react'
+//import { toast } from 'sonner'
+
+interface TransFormProps {
+  setOpen: (value: boolean) => void
+  onSubmit: (data: TransactionTypeStringId) => void
+  defaultValues?: Partial<TransactionTypeStringId>
+  showCancel?: boolean
+  showWalletSelection?: boolean
+}
+
+export const TransactionForm = ({
+  setOpen,
+  onSubmit,
+  defaultValues,
+  showCancel,
+  showWalletSelection = false,
+}: TransFormProps) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    formState: { errors, isValid },
+    setValue,
+  } = useForm<TransactionTypeString>({
+    mode: 'onChange',
+    defaultValues: {
+      walletId: defaultValues?.walletId,
+      type: defaultValues?.type || 'EXPENSE',
+      amount: defaultValues?.amount || '',
+      description: defaultValues?.description || '',
+      createdAt: defaultValues?.createdAt
+        ? new Date(defaultValues.createdAt)
+        : new Date(),
+      categoryId: defaultValues?.categoryId || '',
+    },
+  })
+
+  const amountValue = watch('amount')
+  const categoryIdValue = watch('categoryId')
+  const types = ['EXPENSE', 'INCOME']
+
+  const selectedType = useWatch({
+    control,
+    name: 'type',
+  })
+
+  const { categories, loading, error } = useCategories()
+
+  const { wallets, selectedWallet, setSelectedWalletId, selectedWalletId } =
+    useWallet()
+
+  const [balanceError, setBalanceError] = useState<string | null>(null)
+
+  const handleFormSubmit = (data: TransactionTypeString) => {
+    setBalanceError(null)
+
+    //намудрил тут сильно, потому что если у нас сначала был income и мы меняли на expense, то не работало
+    if (data.type === 'EXPENSE' && selectedWallet) {
+      const amount = parseFloat(data.amount.replace(',', '.')) || 0
+      const originalAmountWithoutType = parseFloat(
+        defaultValues?.amount ? defaultValues?.amount?.replace(',', '.') : '0',
+      )
+      const originalAmount = defaultValues?.type
+        ? defaultValues?.type === 'EXPENSE'
+          ? originalAmountWithoutType
+          : -1 * originalAmountWithoutType
+        : originalAmountWithoutType
+
+      if (selectedWallet.balance - (amount - originalAmount) < 0) {
+        setBalanceError('Insufficient wallet balance')
+        return
+      }
+    }
+    if (defaultValues?.id) {
+      onSubmit({ ...data, id: defaultValues.id })
+    } else {
+      onSubmit(data as TransactionTypeStringId)
+    }
+  }
+
+  const filteredCategories = categories.filter(
+    (category) => category.type === selectedType,
+  )
+
+  const prevTypeRef = useRef<string | undefined>(defaultValues?.type)
+  const firstRenderRef = useRef(true)
+
+  // Сохраняем исходные значения
+  const initialType = useRef(defaultValues?.type)
+  const initialCategoryId = useRef(defaultValues?.categoryId)
+
+  // Сброс значения categoryId при смене типа
+  useEffect(() => {
+    // Пропускаем первый рендер
+    if (firstRenderRef.current) {
+      firstRenderRef.current = false
+      return
+    }
+
+    // Если тип изменился, сбрасываем категорию
+    if (prevTypeRef.current !== selectedType) {
+      // Если тип вернулся к начальному — восстанавливаем категорию
+      if (
+        initialType.current &&
+        selectedType === initialType.current &&
+        initialCategoryId.current
+      ) {
+        setValue('categoryId', initialCategoryId.current)
+      } else {
+        // Иначе сбрасываем
+        setValue('categoryId', '')
+      }
+      prevTypeRef.current = selectedType
+    }
+  }, [selectedType, setValue])
+
+  return (
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+      <Controller
+        name="type"
+        control={control}
+        render={({ field }) => (
+          <div className="flex gap-2 border-border border-2 rounded-full">
+            {types.map((t) => (
+              <motion.button
+                whileTap={{ scale: 0.8 }}
+                key={t}
+                type="button"
+                className={`px-4 py-2 rounded-full text-text-primary w-full cursor-pointer ${
+                  field.value === t ? 'bg-elevation-1' : 'bg-elevation-2'
+                }`}
+                onClick={() => field.onChange(t)}
+              >
+                {t.charAt(0) + t.slice(1).toLowerCase()}
+              </motion.button>
+            ))}
+          </div>
+        )}
+      />
+
+      <div>
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-text-secondary">
+            Wallet
+          </label>
+          <select
+            {...register('walletId', {
+              required: true,
+              value: selectedWalletId,
+              onChange: (e) => setSelectedWalletId(e.target.value),
+            })}
+            disabled={!showWalletSelection}
+            className={`w-full p-2 border-2 rounded border-border bg-elevation-2 transition text-text-primary
+      ${showWalletSelection ? 'cursor-pointer' : 'cursor-not-allowed text-text-secondary'}`}
+          >
+            {wallets.map((wallet) => (
+              <option key={wallet.id} value={wallet.id}>
+                {wallet.name} – {wallet.balance} {wallet.currency}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="flex gap-4">
+        <div className="w-1/2">
+          <label className="block text-sm font-medium text-text-secondary">
+            Amount {!amountValue && <span className="text-error">*</span>}
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="0.00"
+              {...register('amount', {
+                required: true,
+                maxLength: {
+                  value: 12,
+                  message: 'Max length is 12 characters',
+                },
+                validate: {
+                  isNumeric: (v) =>
+                    /^-?\d*[.,]?\d*$/.test(v) ||
+                    'Only numeric values are allowed (use . or , as separator)',
+                  maxTwoDecimals: (value) => {
+                    const [, decimalPart] = value.replace(',', '.').split('.')
+                    return (
+                      !decimalPart ||
+                      decimalPart.length <= 2 ||
+                      'Only up to 2 decimal places allowed'
+                    )
+                  },
+                  isPositive: (value) => {
+                    const numeric = parseFloat(value.replace(',', '.'))
+                    return numeric > 0 || 'Amount must be greater than zero'
+                  },
+                },
+              })}
+              className="w-full p-2 border-2 border-border rounded pr-14 text-text-primary mt-1 font-lato"
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary">
+              {!showCancel
+                ? selectedWallet
+                  ? selectedWallet?.currency
+                  : wallets[0]
+                    ? wallets[0].currency
+                    : ''
+                : defaultValues?.currency}
+            </span>
+          </div>
+          {errors.amount && (
+            <p className="text-error text-sm mt-1">{errors.amount.message}</p>
+          )}
+          {balanceError && (
+            <p className="text-error text-sm mt-1">{balanceError}</p>
+          )}
+        </div>
+        <div className="w-1/2">
+          <label className="block text-sm font-medium text-text-secondary">
+            Description
+          </label>
+          <input
+            {...register('description', {
+              maxLength: {
+                value: 100,
+                message: 'Max length is 100 characters',
+              },
+            })}
+            placeholder="Optional description"
+            className="w-full p-2 border-2 border-border rounded text-text-primary mt-1"
+          />
+          {errors.description && (
+            <p className="text-error text-sm mt-1">
+              {errors.description.message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {loading ? (
+        <div>
+          <label className="block text-sm font-medium text-text-secondary">
+            Category {!categoryIdValue && <span className="text-error">*</span>}
+          </label>
+          <select
+            className={`w-full p-2 border-2 border-border rounded bg-elevation-2 
+            mt-1 transition cursor-pointer text-text-secondary`}
+          >
+            <option value="" disabled hidden>
+              Select category
+            </option>
+          </select>
+        </div>
+      ) : error ? (
+        <div className="text-error mt-4">Error loading categories.</div>
+      ) : (
+        <div>
+          <label className="block text-sm font-medium text-text-secondary">
+            Category {!categoryIdValue && <span className="text-error">*</span>}
+          </label>
+          <select
+            {...register('categoryId', {
+              required: true,
+            })}
+            className={`w-full p-2 border-2 border-border rounded bg-elevation-2 
+  mt-1 transition cursor-pointer ${categoryIdValue ? 'text-text-primary' : 'text-text-secondary'}`}
+          >
+            <option value="" disabled hidden>
+              Select category
+            </option>
+            {filteredCategories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.icon} {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      {/* проблема из-за асинхронной загрузки категорий */}
+
+      <Controller
+        control={control}
+        name="createdAt"
+        rules={{ required: true }}
+        render={({ field }) => (
+          <div className="relative w-full">
+            <label className="block text-sm font-medium text-text-secondary mb-1">
+              Date
+            </label>
+            <DatePicker
+              selected={field.value}
+              onChange={(date) => field.onChange(date)}
+              dateFormat="dd-MM-yyyy"
+              maxDate={new Date()}
+              className="w-full p-2 border-2 border-border rounded bg-elevation-2 text-text-primary cursor-pointer"
+              wrapperClassName="w-full"
+              customInput={<CustomDatePickerInput />}
+              popperPlacement="bottom-start"
+              calendarClassName="custom-datepicker"
+            />
+          </div>
+        )}
+      />
+
+      <div className="flex justify-end gap-2 mt-4">
+        {showCancel && (
+          <Button
+            onClick={() => setOpen(false)}
+            text="Cancel"
+            defcolor={false}
+            deftype={true}
+          />
+        )}
+        <Button text="Save" disabledCondition={!isValid} />
+      </div>
+    </form>
+  )
+}
