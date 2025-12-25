@@ -18,7 +18,7 @@ While I worked as part of a team, I was responsible for the **core logic and fun
   - Dynamic grouping of transactions by Month and Year.
   - Context-aware forms (filtering wallets based on where the transaction is created).
 - **Global State Management:** Architected the **React Context** logic for Wallets and Transactions to ensure high performance and data persistence across the app.
-- **UI/UX Enhancements:** Implemented all interactive **Framer Motion** animations, modal windows, and responsive layouts using **Tailwind CSS**.
+- **UI/UX Enhancements:** Implemented all interactive **Motion** animations, modal windows, and responsive layouts using **Tailwind CSS**.
 
 ## 👥 Team & Roles
 
@@ -67,7 +67,7 @@ VITE_API_BASE_URL=[https://finance-app-backend-dev.onrender.com/api](https://fin
 VITE_SUPABASE_URL=...
 VITE_SUPABASE_ANON_KEY=...
 
+```
 Note: The original backend and Supabase instance are currently offline. This repository focuses on the frontend architecture and UI implementation.
 
 Developed as a collaborative team project to build a real-world financial management tool.
-```
