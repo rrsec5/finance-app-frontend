@@ -1,153 +1,73 @@
-# 📊 Finance Tracker — Гайд
+# 💸 Finance App (Frontend)
+
+A modern, responsive web application for managing personal finances, tracking expenses, and organizing digital wallets. This project focuses on a seamless user experience, complex state management, and polished UI interactions.
+
+## 📺 Project Presentation
+
+Our team presented this project, showcasing its full functionality. You can watch the walkthrough with English subtitles here:
+👉 **[Watch Project Presentation on YouTube](https://www.youtube.com/watch?v=0jhBfZ_Dv_M)**
+
+## 🚀 Key Features (My Core Contributions)
+
+While I worked as part of a team, I was responsible for the **core logic and functional modules** of the application:
+
+- **Wallet Management:** Complete CRUD functionality for digital wallets, including name editing and balance displays.
+- **Transaction System:**
+  - Advanced system for adding income/expenses.
+  - Category-based organization with custom icons.
+  - Dynamic grouping of transactions by Month and Year.
+  - Context-aware forms (filtering wallets based on where the transaction is created).
+- **Global State Management:** Architected the **React Context** logic for Wallets and Transactions to ensure high performance and data persistence across the app.
+- **UI/UX Enhancements:** Implemented all interactive **Framer Motion** animations, modal windows, and responsive layouts using **Tailwind CSS**.
+
+## 👥 Team & Roles
+
+- **Mykhailo Parm(Lead):** Project architecture, mentorship, and technical guidance.
+- **Mykyta Shevchenko(Me):** Core Frontend Developer (Dashboard, Wallets, Transactions).
+- **Anastasia:** Implementation of the Authentication system (including Google OAuth) and the Reports (Charts) module.
+
+## 🛠 Tech Stack
+
+- **Core:** React + TypeScript
+- **Routing:** `react-router-dom`
+- **API Client:** Axios (HTTP requests & error handling)
+- **Styling:** Tailwind CSS & Motion (Animations)
+- **Forms & Validation:** `react-hook-form`
+- **UI Components:**
+  - `sonner` (Toast notifications)
+  - `react-icons` (Scalable vector icons)
+  - `react-datepicker` (Customizable date selection)
+
+## 📸 Screenshots
+
+| Authorization Page                              | Registration Page                         | Success Toast                       | Error Toast                     |
+| :---------------------------------------------- | :---------------------------------------- | :---------------------------------- | :------------------------------ |
+| ![Authorization](screenshots/Authorization.png) | ![Registration](screenshots/Registration.png) | ![Success](screenshots/success.png) | ![Error](screenshots/error.png) |
+
+| Sidebar                             | Dashboard                               | Wallets                             | WalletDetail                                  |
+| :---------------------------------- | :-------------------------------------- | :---------------------------------- | :-------------------------------------------- |
+| ![Sidebar](screenshots/Sidebar.png) | ![Dashboard](screenshots/Dashboard.png) | ![Wallets](screenshots/Wallets.png) | ![WalletDetail](screenshots/WalletDetail.png) |
+
+| Create Wallet                                   | Edit Wallet                                 | Delete Wallet                                   |
+| :---------------------------------------------- | :------------------------------------------ | :---------------------------------------------- |
+| ![Create Wallet](screenshots/Create_Wallet.png) | ![Edit Wallet](screenshots/Edit_Wallet.png) | ![Delete Wallet](screenshots/Delete_Wallet.png) |
+
+| Create Transaction from Dashboard                                                  | Create Transaction from WalletDetail Page                                                     | Edit Transaction                                      | Delete Transaction                                        | Customized Date Picker                                           |
+| :--------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------- | :---------------------------------------------------- | :-------------------------------------------------------- | :--------------------------------------------------------------- |
+| ![Create Transaction from Dashboard](screenshots/Create_Transaction_Dashboard.png) | ![Create Transaction from WalletDetail Page](screenshots/Create_Transaction_WalletDetail.png) | ![Edit Transaction](screenshots/Edit_Transaction.png) | ![Delete Transaction](screenshots/Delete_Transaction.png) | ![Customized Date Picker](screenshots/Customized_DatePicker.png) |
 
 ---
 
-## Початков налаштування
+## 📂 Configuration & Environment
 
-### 1. Встановлення інструментів
+The application uses an `.env` file for backend connectivity:
 
-- **Git**: [Завантажити Git](https://git-scm.com/downloads)
+```env
+VITE_API_BASE_URL=[https://finance-app-backend-dev.onrender.com/api](https://finance-app-backend-dev.onrender.com/api)
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
 
-- **Node.js (версія LTS)**: [Завантажити Node.js](https://nodejs.org)
+Note: The original backend and Supabase instance are currently offline. This repository focuses on the frontend architecture and UI implementation.
 
-- **pnpm (менеджер пакетів)**:
-
-  ```bash
-  npm install -g pnpm
-  ```
-
-- **Перевірка встановлення**:
-
-  ```bash
-  git --version
-  node -v
-  pnpm -v
-  ```
-
-### 2. Налаштування Git
-
-Перед першою роботою з Git, ОБОВ’ЯЗКОВО необхідно вказати ім’я та email:
-
-  ```bash
-  git config --global user.name "Твоє Ім’я"
-  git config --global user.email "твій@email.com"
-  ```
-
-**Це важливо для історії комітів і відстеження, хто над чим працював.*
-
-### 3. Клонування проєкту
-
-  ```bash
-  git clone https://github.com/NURE-DPS/finance-app-frontend.git
-  cd finance-app-frontend
-  pnpm install
-  pnpm dev
-  ```
-
----
-
-## Jira + Git
-
-### 1. Комміт = subtask
-
-У коміт-повідомленні:
-
-  ```bash
-  [FTA-123] <type>: *message*
-  ```
-
-#### Types
-
-1. feat — додавання нової фічі, яку побачить користувач або яка змінює поведінку системи.
-2. fix — виправлення багу, який порушує очікувану поведінку.
-3. refactor — переписування або очищення коду без зміни функціональності.
-4. chore — допоміжні зміни, які не впливають на функціональність (наприклад, оновлення залежностей, конфігурацій, скриптів).
-5. test — додавання або зміна юніт-тестів, інтеграційних тестів тощо.
-6. style — зміни, що не впливають на логіку: форматування, пробіли, лапки, ESLint-фікси тощо.
-
-**FTA-123 — це ключ subtask у Jira.*
-**message пишеться з маленької літери, без крапки в кінці.*
-
-### 2. Гілка = User Story / Task / Bug
-
-У назві гілки:
-  
-  ```bash
-  FTA-123:*user-registration* 
-  ```
-
-**FTA-123 — ключ Jira.*
-**user-registration — короткий опис задачі (1–2 слова), у форматі: іменник + інфінітив дії (наприклад: transaction-creation, profile-update).*
-**Весь опис пишеться з маленької літери, слова розділяються дефісом.*
-
-### 3. Робочий флоу
-
-- **Взяти задачу в Jira (To Do → In Progress)**
-- **Перевірити, що ви знаходитесь у dev гілці**
-- **Створити нову гілку**:
-
-  ```bash
-  git checkout -b FTA-123:test-branch 
-  ```
-
-**Створюємо гілки для усієї юзер стоі, а не окремо для кожної сабтаски*
-
-- **Працюєш у своїй гілці**
-- **Зберігаєш, лінтиш**:
-  
-  ```bash
-  pnpm lint
-  git add .
-  git commit -m "[FTA-123] <type>: *message*"
-  git push origin [FTA-123]:test-branch 
-  ```
-
-- **Створюєш Pull Request на GitHub**
-- **Переносиш задачу у статус In Review**
-
----
-
-## Як працюють гілки
-
-- **main** — основна гілка (тільки для стабільного коду)
-
-- **dev** — основна гілка розробки
-
----
-
-## Різниця між dependencies та devDependencies
-
-| dependencies | devDependencies |
-| ----------- | ----------- |
-| Потрібні в продакшені | Потрібні тільки для розробки |
-| React, axios, tailwind | TypeScript, ESLint, Prettier |
-
----
-
-## Структура проєкту
-
-  ```js
-src/
- ├── assets/       // зображення, іконки
- ├── components/   // UI-компоненти
- ├── config/       // Supabase, глобальні налаштування
- ├── hooks/        // власні хуки React
- ├── layouts/      // шаблони сторінок
- ├── pages/        // сторінки (як у маршрутах)
- ├── stores/       // глобальний стан (наприклад, Zustand)
- ├── styles/       // стилі Tailwind
- ├── utils/        // допоміжні функції
-   ```
-
----
-
-## package.json
-
-  ```json
-"scripts": {
-  "dev": "vite",            // запустити локально
-  "build": "tsc -b && vite build", // зібрати білд
-  "lint": "eslint .",       // лінтинг
-  "preview": "vite preview" // перегляд зібраного білду
-}
-  ```
+Developed as a collaborative team project to build a real-world financial management tool.
+```
